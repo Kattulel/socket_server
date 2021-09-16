@@ -19,13 +19,5 @@ def get_content_type(file):
     }.get(ext)
 
 
-def get_request_type(file):
-    ext = file.split(".")[-1]
-    if ext in ["jpg", "jpeg", "png"]:
-        return "image"
-    else:
-        return "text"
-
-
 def dt():
     return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
