@@ -1,18 +1,14 @@
 import os
+import helper
+from datetime import datetime
 
 
 class ResposeHandler:
     def __init__(self, path):
         self.path = path
-        self.supported_requests = ["js", "html", "jpeg", "jpg", "png"]
 
     def exists(self, filename):
         return True if os.path.isfile(f'{self.path}/{filename}') else False
-
-    @staticmethod
-    def get_ext(file):
-        ext = file.split(".")[-1]
-        return ext
 
     @staticmethod
     def get_url_file(request):
@@ -28,31 +24,37 @@ class ResposeHandler:
         return data.read()
 
     def get_text_data(self, file):
-        data = open(f'{self.path}/{file}', 'r')
+        data = open(f'{self.path}/{file}', 'rb')
         return data.read()
 
-    def build_response(self, file):
-        ext = self.get_ext(file)
-        if not self.exists(file):
-            response = 'HTTP/1.0 404 OK\r\n' \
-                       'Content-Type: text/html\r\n\r\n' + \
-                       self.get_text_data("404.html")
-            return response.encode("utf-8")
-
-        if ext == "jpeg":
-            data = self.get_image_data(file)
-            return b'\r\n'.join([
-                b"HTTP/1.0 200 OK",
+    def get_image_respose(self, file, status):
+        data = self.get_image_data(file)
+        return b'\r\n'.join([
+                helper.get_header(status),
                 b"Connection: close",
-                b"Content-Type: image/jpeg",
+                helper.get_content_type(file),
                 bytes("Content-Length: %s" % len(data), 'utf-8'),
                 b'', data
             ])
 
-        if ext == "html":
-            response = 'HTTP/1.0 200 OK\r\n'\
-                       'Content-Type: text/html\r\n\r\n'+\
-                       self.get_text_data(file)
-            return response.encode("utf-8")
+    def get_text_response(self, file, status):
+        return b'\r\n'.join([
+            helper.get_header(status),
+            helper.get_content_type(file),
+            b'\r\n', self.get_text_data(file)
+        ])
 
+    def build_response(self, file):
+        dt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        if file != "favicon.ico" or file is not None:
+            print(f'{dt} | {file}')
+        if not self.exists(file):
+            status = 404
+            file = "404.html"
+        else:
+            status = 200
 
+        if helper.get_request_type(file) == "text":
+            return self.get_text_response(file, status)
+        elif helper.get_request_type(file) == "image":
+            return self.get_image_respose(file, status)

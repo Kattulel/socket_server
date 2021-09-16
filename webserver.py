@@ -36,12 +36,9 @@ class HttpRequest(Thread):
 
     def run(self):
         request = self.conn.recv(self.buffer_size)
-        # print("recebi bagulho", request)
         file = self.handler.get_url_file(request)
-
         response = HttpResponse(self.conn, self.addr, file)
         response.process_response()
-
         self.conn.close()
 
 
