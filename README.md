@@ -2,6 +2,4 @@
 
 ### trabalho bunro fodase
 
-
-a fazer:
-refatoracao fodsase
+ta brabo
