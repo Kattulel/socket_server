@@ -29,6 +29,7 @@ class ResposeHandler:
                 helper.get_header(status),
                 helper.get_content_type(file),
                 bytes("Content-Length: %s" % len(data), 'utf-8'),
+                helper.get_date(),
                 b'', data
             ])
 

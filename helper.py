@@ -4,7 +4,7 @@ from datetime import datetime
 def get_header(status):
     return {
         200: b"HTTP/1.0 200 OK",
-        404: b"HTTP/1.0 404 OK"
+        404: b"HTTP/1.0 404 NOT FOUND"
     }.get(status)
 
 
@@ -17,6 +17,10 @@ def get_content_type(file):
         "html": b"Content-Type: text/html; charset=utf-8",
         "js": b"Content-Type: text/javascript; charset=utf-8"
     }.get(ext)
+
+
+def get_date():
+    return f"Date: {dt()}".encode("utf-8")
 
 
 def dt():
