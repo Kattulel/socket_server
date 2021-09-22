@@ -8,4 +8,4 @@ def thread_function(url):
 
 
 for i in range(100):
-    threading.Thread(target=thread_function, args=('http://localhost:6789/',)).start()
+    threading.Thread(target=thread_function, args=('http://localhost:6789/index.html',)).start()
