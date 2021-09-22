@@ -30,6 +30,7 @@ class ResposeHandler:
                 helper.get_content_type(file),
                 bytes("Content-Length: %s" % len(data), 'utf-8'),
                 helper.get_date(),
+                b"Connection: close",
                 b'', data
             ])
 
